@@ -3,6 +3,14 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const compression = require("compression");
 
+// Request a database instance.
+const request = indexedDB.open("budgetDatabase", 1);
+
+// Returns a result that we can then manipulate.
+request.onsuccess = event => {
+  console.log(request.result);
+};
+
 const PORT = 3000;
 
 const app = express();
