@@ -60,6 +60,13 @@
 			request.onsuccess = (event) => {
 				console.log(request.result);
 			};
+
+      // Creat an object store inside the onupgradeneeded method.
+      request.onupgradeneeded = ({ target }) => {
+        const db = target.result;
+        const objectStore = db.createObjectStore("budget_tracker");
+      };
+      
 		</script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 		<script src="index.js"></script>
