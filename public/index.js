@@ -154,17 +154,23 @@ document.querySelector("#sub-btn").onclick = function() {
 
 
 	// Request a database instance.
-  const request = indexedDB.open("budgetDatabase", 1);
+  const request = indexedDB.open("budgetDatabase", 2);
 
   // Returns a result that we can then manipulate.
   request.onsuccess = (event) => {
     console.log(request.result);
+
+    const db = request.result;
+    // giving permission for the transaction to read/write the object store.
+    const transaction = db.transaction(["transactions"], "readwrite");
+
   };
 
   // Creat an object store inside the onupgradeneeded method.
   request.onupgradeneeded = ({ target }) => {
     const db = target.result;
     const objectStore = db.createObjectStore("transactions");
+
     // creating indexes
     objectStore.createIndex("name", "name");
     objectStore.createIndex("value", "value");
