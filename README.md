@@ -28,7 +28,7 @@
   
   ## Screenshot
   
-  ![budget](https://github.com/CaitlinCollins/tech-blog/blob/main/public/budget.png)
+  ![budget](https://github.com/CaitlinCollins/budget-tracker/blob/main/public/budget.png)
   
   ## Contributing
   No specified contribution information. 
