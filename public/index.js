@@ -151,3 +151,22 @@ document.querySelector("#add-btn").onclick = function() {
 document.querySelector("#sub-btn").onclick = function() {
   sendTransaction(false);
 };
+
+
+	// Request a database instance.
+  const request = indexedDB.open("budgetDatabase", 1);
+
+  // Returns a result that we can then manipulate.
+  request.onsuccess = (event) => {
+    console.log(request.result);
+  };
+
+  // Creat an object store inside the onupgradeneeded method.
+  request.onupgradeneeded = ({ target }) => {
+    const db = target.result;
+    const objectStore = db.createObjectStore("transactions");
+    // creating indexes
+    objectStore.createIndex("name", "name");
+    objectStore.createIndex("value", "value");
+    objectStore.createIndex("date", "date");
+  };
