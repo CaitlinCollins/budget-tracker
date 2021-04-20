@@ -163,8 +163,15 @@ document.querySelector("#sub-btn").onclick = function() {
     const db = request.result;
     // giving permission for the transaction to read/write the object store.
     const transaction = db.transaction(["transactions"], "readwrite");
+    const budgetStore = transaction.objectStore("transactions");
+
 
   };
+
+  // Returns an error in the console on error.
+  request.onerror = event => {
+    console.log("Error: " + event.target.errorCode);
+    };
 
   // Creat an object store inside the onupgradeneeded method.
   request.onupgradeneeded = ({ target }) => {
