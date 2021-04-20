@@ -184,6 +184,14 @@ request.onerror = (event) => {
 	console.log("Error: " + event.target.errorCode);
 };
 
+// Saving new record to the db
+function saveRecord(record) {
+  const transaction = db.transaction(["transactions"], "readwrite");
+	const budgetStore = transaction.objectStore("transactions");
+
+  budgetStore.add(record);
+}
+
 function checkDatabase() {
 	// giving permission for the transaction to read/write the object store.
 	const transaction = db.transaction(["transactions"], "readwrite");
