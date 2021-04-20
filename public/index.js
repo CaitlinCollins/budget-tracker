@@ -218,3 +218,9 @@ function checkDatabase() {
 		}
 	};
 }
+
+// listening for app coming back online and checking database
+window.addEventListener("online", checkDatabase);
+
+// App is offline
+// window.addEventListener("offline", isOffline, false);
