@@ -11,7 +11,6 @@ request.onupgradeneeded = ({ target }) => {
 
 // Returns a result that we can then manipulate.
 request.onsuccess = (event) => {
-
 	db = event.target.result;
 	// check if app is online before reading from db
 	if (navigator.onLine) {
@@ -26,10 +25,10 @@ request.onerror = (event) => {
 
 // Saving new record to the db
 function saveRecord(record) {
-  const transaction = db.transaction(["transactions"], "readwrite");
+	const transaction = db.transaction(["transactions"], "readwrite");
 	const budgetStore = transaction.objectStore("transactions");
 
-  budgetStore.add(record);
+	budgetStore.add(record);
 }
 
 function checkDatabase() {
@@ -41,43 +40,27 @@ function checkDatabase() {
 	getAll.onsuccess = function () {
 		// making sure there are transactions waiting
 		if (getAll.result.length > 0) {
-			// bulk push to /api/transaction/bulk
-      fetch("/api/transaction/bulk", {
-        type: "POST",
+			// bulk push to /api/transaction
+			$.ajax({
+				type: "POST",
+				url: "/api/transaction",
 				data: JSON.stringify(getAll.result),
 				headers: {
 					Accept: "application/json, text/plain, */*",
 					"Content-Type": "application/json",
-        }
-      })
-      .then(data => data.json())
-      .then(() => {
-        const transaction = db.transaction(["transactions"], "readwrite");
+				},
+				success: function() {
+					const transaction = db.transaction(["transactions"], "readwrite");
 					const budgetStore = transaction.objectStore("transactions");
 					// clearing store after bulk push
 					budgetStore.clear();
-      })
-			// $.ajax({
-			// 	type: "POST",
-			// 	url: "/api/transaction",
-			// 	data: JSON.stringify(getAll.result),
-			// 	headers: {
-			// 		Accept: "application/json, text/plain, */*",
-			// 		"Content-Type": "application/json",
-			// 	},
-			// 	success: function (msg) {
-			// 		const transaction = db.transaction(["transactions"], "readwrite");
-			// 		const budgetStore = transaction.objectStore("transactions");
-			// 		// clearing store after bulk push
-			// 		budgetStore.clear();
-			// 		populateTable();
-			// 	},
-			// 	error: function (XMLHttpRequest, textStatus, errorThrown) {
-			// 		console.log(getall.result);
-			// 		console.log("Failed to Save DB");
-			// 		console.log(XMLHttpRequest, textStatus, errorThrown);
-			// 	},
-			// });
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					console.log(getall.result);
+					console.log("Failed to Save DB");
+					console.log(XMLHttpRequest, textStatus, errorThrown);
+				},
+			});
 		}
 	};
 }
@@ -85,5 +68,3 @@ function checkDatabase() {
 // listening for app coming back online and checking database
 window.addEventListener("online", checkDatabase);
 
-// App is offline
-// window.addEventListener("offline", isOffline, false);
